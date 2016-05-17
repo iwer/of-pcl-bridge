@@ -64,6 +64,18 @@ ofQuaternion toOfQuaternion(Eigen::Quaternionf& pclQuat)
 	return  ret;
 }
 
+ofMatrix4x4 toOfMatrix4x4(Eigen::Affine3f& pclMat)
+{
+	ofMatrix4x4 mat;
+	
+	mat.set(pclMat(0, 0), pclMat(0, 1), pclMat(0, 2), pclMat(0, 3),
+		pclMat(1, 0), pclMat(1, 1), pclMat(1, 2), pclMat(1, 3),
+		pclMat(2, 0), pclMat(2, 1), pclMat(2, 2), pclMat(2, 3),
+		pclMat(3, 0), pclMat(3, 1), pclMat(3, 2), pclMat(3, 3));
+
+	return mat;
+}
+
 void toEigenVector4f(ofVec3f &ofVec, Eigen::Vector4f &pclVec)
 {
 	pclVec.x() = ofVec.x / 1000;
@@ -86,4 +98,22 @@ void toOfVector3(Eigen::Vector4f &pclVec, ofVec3f &ofVec)
 void toOfQuaternion(Eigen::Quaternionf & pclQuat, ofQuaternion &ofQuat)
 {
 	ofQuat.set(pclQuat.x(), pclQuat.y(), pclQuat.z(), pclQuat.w());
+}
+
+void createOfMeshFromPointsAndTriangles(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr src, boost::shared_ptr<std::vector<pcl::Vertices>> triangles, ofMesh &targetMesh)
+{
+	if (triangles && src) {
+		// triangle inputMesh
+		targetMesh.clear();
+		targetMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+		pcl::PointXYZRGB p;
+		for (auto &t : *triangles) {
+			for (auto &pointindex : t.vertices) {
+				p = src->at(pointindex);
+				ofVec3f ofp = ofVec3f(p.x * 1000, p.y * 1000, p.z * 1000);
+				targetMesh.addVertex(ofp);
+				targetMesh.addColor(ofColor(p.r, p.g, p.b));
+			}
+		}
+	}
 }
