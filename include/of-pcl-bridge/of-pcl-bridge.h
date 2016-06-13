@@ -7,6 +7,8 @@
 
 
 void toOfTexture(boost::shared_ptr<pcl::io::Image> image, ofTexture & texture);
+void toOfImage(boost::shared_ptr<pcl::io::Image> image, ofImage & texture);
+
 void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputCloud, ofMesh &targetMesh);
 void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputCloud, ofColor color, ofMesh &targetMesh);
 void createOfMeshFromPointsAndTriangles(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr src, boost::shared_ptr<std::vector<pcl::Vertices>> triangles, ofMesh &targetMesh);

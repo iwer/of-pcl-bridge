@@ -13,6 +13,19 @@ void toOfTexture(boost::shared_ptr<pcl::io::Image> image, ofTexture & texture)
 	}
 }
 
+void toOfImage(boost::shared_ptr<pcl::io::Image> image, ofImage & texture)
+{
+	auto width = image->getWidth();
+	auto height = image->getHeight();
+	auto encoding = image->getEncoding();
+
+	if (encoding == pcl::io::Image::Encoding::RGB)
+	{
+		auto data = static_cast<const unsigned char *>(image->getData());
+		texture.setFromPixels(data, width, height, OF_IMAGE_COLOR);
+	}
+}
+
 void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputCloud, ofMesh &targetMesh)
 {
 	targetMesh.clear();
