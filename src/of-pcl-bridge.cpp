@@ -1,4 +1,5 @@
 #include "of-pcl-bridge/of-pcl-bridge.h"
+#define PCL_TO_OF_SCALE 1000
 
 void toOfTexture(boost::shared_ptr<pcl::io::Image> image, ofTexture & texture)
 {
@@ -31,7 +32,7 @@ void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputClo
 	targetMesh.clear();
 	targetMesh.setMode(OF_PRIMITIVE_POINTS);
 	for (auto &p : inputCloud->points) {
-		targetMesh.addVertex(ofVec3f(p.x * 1000, p.y * 1000, p.z * 1000));
+		targetMesh.addVertex(ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE));
 		targetMesh.addColor(ofColor(p.r, p.g, p.b));
 	}
 }
@@ -43,7 +44,7 @@ void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputClo
 		targetMesh.clear();
 		targetMesh.setMode(OF_PRIMITIVE_POINTS);
 		for (auto &p : inputCloud->points) {
-			targetMesh.addVertex(ofVec3f(p.x * 1000, p.y * 1000, p.z * 1000));
+			targetMesh.addVertex(ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE));
 			targetMesh.addColor(color);
 		}
 	}
@@ -91,9 +92,9 @@ ofMatrix4x4 toOfMatrix4x4(Eigen::Affine3f& pclMat)
 
 void toEigenVector4f(ofVec3f &ofVec, Eigen::Vector4f &pclVec)
 {
-	pclVec.x() = ofVec.x / 1000;
-	pclVec.y() = ofVec.y / 1000;
-	pclVec.z() = ofVec.z / 1000;
+	pclVec.x() = ofVec.x / PCL_TO_OF_SCALE;
+	pclVec.y() = ofVec.y / PCL_TO_OF_SCALE;
+	pclVec.z() = ofVec.z / PCL_TO_OF_SCALE;
 	pclVec.w() = 0;
 }
 void toEigenQuaternionf(ofQuaternion &ofQuat, Eigen::Quaternionf & pclQuat)
@@ -106,7 +107,7 @@ void toEigenQuaternionf(ofQuaternion &ofQuat, Eigen::Quaternionf & pclQuat)
 
 void toOfVector3(Eigen::Vector4f &pclVec, ofVec3f &ofVec)
 {
-	ofVec.set(pclVec.x() * 1000, pclVec.y() * 1000, pclVec.z() * 1000);
+	ofVec.set(pclVec.x() * PCL_TO_OF_SCALE, pclVec.y() * PCL_TO_OF_SCALE, pclVec.z() * PCL_TO_OF_SCALE);
 }
 void toOfQuaternion(Eigen::Quaternionf & pclQuat, ofQuaternion &ofQuat)
 {
@@ -123,7 +124,7 @@ void createOfMeshFromPointsAndTriangles(pcl::PointCloud<pcl::PointXYZRGB>::Const
 		for (auto &t : *triangles) {
 			for (auto &pointindex : t.vertices) {
 				p = src->at(pointindex);
-				ofVec3f ofp = ofVec3f(p.x * 1000, p.y * 1000, p.z * 1000);
+				ofVec3f ofp = ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE);
 				targetMesh.addVertex(ofp);
 				targetMesh.addColor(ofColor(p.r, p.g, p.b));
 			}
