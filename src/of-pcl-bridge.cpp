@@ -50,6 +50,20 @@ void createOfMeshFromPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr inputClo
 	}
 }
 
+void createOfMeshFromPointsWNormals(pcl::PointCloud<pcl::PointXYZRGBNormal>::ConstPtr inputCloud, ofMesh& targetMesh)
+{
+	if (inputCloud) {
+		// triangle inputMesh
+		targetMesh.clear();
+		targetMesh.setMode(OF_PRIMITIVE_POINTS);
+		for (auto &p : inputCloud->points) {
+			targetMesh.addVertex(ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE));
+			targetMesh.addColor(ofColor(p.r, p.g, p.b));
+			targetMesh.addNormal(ofVec3f(p.normal_x, p.normal_y, p.normal_z));
+		}
+	}
+}
+
 Eigen::Vector4f toEigenVector4f(ofVec3f& ofVec)
 {
 	Eigen::Vector4f ret;
@@ -127,6 +141,25 @@ void createOfMeshFromPointsAndTriangles(pcl::PointCloud<pcl::PointXYZRGB>::Const
 				ofVec3f ofp = ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE);
 				targetMesh.addVertex(ofp);
 				targetMesh.addColor(ofColor(p.r, p.g, p.b));
+			}
+		}
+	}
+}
+
+void createOfMeshFromPointsWNormalsAndTriangles(pcl::PointCloud<pcl::PointXYZRGBNormal>::ConstPtr src, boost::shared_ptr<std::vector<pcl::Vertices>> triangles, ofMesh& targetMesh)
+{
+	if (triangles && src) {
+		// triangle inputMesh
+		targetMesh.clear();
+		targetMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+		pcl::PointXYZRGBNormal p;
+		for (auto &t : *triangles) {
+			for (auto &pointindex : t.vertices) {
+				p = src->at(pointindex);
+				ofVec3f ofp = ofVec3f(p.x * PCL_TO_OF_SCALE, p.y * PCL_TO_OF_SCALE, p.z * PCL_TO_OF_SCALE);
+				targetMesh.addVertex(ofp);
+				targetMesh.addColor(ofColor(p.r, p.g, p.b));
+				targetMesh.addNormal(ofVec3f(p.normal_x, p.normal_y, p.normal_z));
 			}
 		}
 	}
