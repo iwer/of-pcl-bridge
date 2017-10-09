@@ -1,5 +1,9 @@
 #pragma once
 
+#undef Success
+#undef Status
+#include <Eigen/Core>
+
 #include "ofMain.h"
 #include "pcl/common/common.h"
 #include <pcl/io/image.h>
